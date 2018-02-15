@@ -1,2 +1,1 @@
-open BsReactNative;
-let app = () => <Celo name="Welcome to my App" />
+let app = () => <Home name="Home" />;

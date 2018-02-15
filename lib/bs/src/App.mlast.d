@@ -1,1 +1,1 @@
-src/App.cmj : src/Celo.cmj
+src/App.cmj : src/Home.cmj
