@@ -20,9 +20,13 @@ let onButtonPress = v => Alert.alert(~title={j|你好，$v|j}, ());
 
 let component = ReasonReact.reducerComponent("Home");
 
-let renderItem = (onPress) =>
+let renderItem = onPress =>
   FlatList.renderItem(({item}) =>
-    <TodoCell text=item.text finish=item.finish onValueChange=(_b => onPress(item)) />
+    <TodoCell
+      text=item.text
+      finish=item.finish
+      onValueChange=(b => onPress({...item, finish: b}))
+    />
   );
 
 let make = (~name: string, _children) => {
@@ -30,8 +34,8 @@ let make = (~name: string, _children) => {
   initialState: () => {tasks: [], toggle: false},
   reducer: (action, state) =>
     switch action {
-    | ElseToggle(b) => ReasonReact.Update({...state, toggle: b})
-    | Toggle(_b) => ReasonReact.Update({...state, tasks: [...state.tasks]})
+    | ElseToggle(b) => ReasonReact.Update({toggle: b, tasks: []})
+    | Toggle(i) => ReasonReact.Update({...state, tasks: [i, ...List.filter(x => x.key !== i.key,state.tasks)]})
     | UpserTask(i) =>
       ReasonReact.Update({...state, tasks: [i, ...state.tasks]})
     },
@@ -46,51 +50,23 @@ let make = (~name: string, _children) => {
         onValueChange=(b => self.send(ElseToggle(b)))
       />
       <Button
-        title="Learoeeere"
+        title="Learefaefaeoeeere"
         color="#841584"
-        accessibilityLabel="Learn more about this purple button"
         onPress=(
           _e =>
             self.send(
               UpserTask({
                 key: string_of_int(List.length(self.state.tasks)),
-                text: "hieegh",
+                text: "hieegh key: " ++ string_of_int(List.length(self.state.tasks)),
                 finish: false
               })
             )
         )
       />
       <FlatList
-        renderItem=(renderItem( item => self.send(Toggle(item))))
+        renderItem=(renderItem(item => self.send(Toggle(item))))
         keyExtractor=((item, _) => item.key)
         data=(Array.of_list(self.state.tasks))
       />
     </View>
 };
-/* let make = (~name: string, _children) => {
-     ...component, /* spread the template's other defaults into here  */
-     initialState: () => { tasks: [||] },
-     reducer: (action, state) =>
-       switch (action) {
-       | UpserTask(item) => ReasonReact.Update({...state, tasks: [|item, ...state.tasks]})
-       | Keep => ReasonReact.Update({...state, tasks: [||]})
-       },
-     render: _self =>
-       <View
-         style=Style.(
-                 style([flex(1.), justifyContent(Center), alignItems(Center)])
-               )>
-         <Button
-           title="Learn More"
-           color="#841584"
-           accessibilityLabel="Learn more about this purple button"
-           onPress=onButtonPress
-         />
-         <FlatList
-           renderItem=(renderItem(b => self.send(Toggle(b))))
-           keyExtractor=((item, _) => item.key)
-           data={self.state.tasks}
-         />
-         <Text> (ReasonReact.stringToElement(name)) </Text>
-       </View>
-   }; */
