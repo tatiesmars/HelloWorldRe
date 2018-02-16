@@ -14,19 +14,21 @@ type state = {
 
 type action =
   | UpserTask(item)
-  | Toggle(item)
+  | DeleteTask(item)
   | ElseToggle(bool);
 
 let onButtonPress = v => Alert.alert(~title={j|你好，$v|j}, ());
 
 let component = ReasonReact.reducerComponent("Home");
 
-let renderItem = onPress =>
+let renderItem = (onPress, onDelete, onEdit) =>
   FlatList.renderItem(({item}) =>
     <TodoCell
-      text=item.text
-      finish=item.finish
-      onValueChange=(b => onPress({...item, finish: b}))
+      value=(item.text)
+      toggle=item.finish
+      onToggle=(b => onPress({...item, finish: b}))
+      onDelete=(() => onDelete(item))
+      onEdit=((s) => onEdit({...item, text: s}))
     />
   );
 
@@ -36,41 +38,74 @@ let make = (~name: string, _children) => {
   reducer: (action, state) =>
     switch action {
     | ElseToggle(b) => ReasonReact.Update({toggle: b, tasks: []})
-    | Toggle(i) => ReasonReact.Update({...state, tasks: [i, ...List.filter(x => x.key !== i.key,state.tasks)]})
+    | DeleteTask(i) =>
+      ReasonReact.Update({
+        ...state,
+        tasks: List.filter(x => x.key !== i.key, state.tasks)
+      })
     | UpserTask(i) =>
-      ReasonReact.Update({...state, tasks: [i, ...state.tasks]})
+      ReasonReact.Update({
+        ...state,
+        tasks: [i, ...List.filter(x => x.key !== i.key, state.tasks)]
+      })
     },
   render: self =>
     <View
       style=Style.(
               style([flex(1.), justifyContent(Center), alignItems(Center)])
             )>
-      <TodoCell
-        text=name
-        finish=self.state.toggle
-        onValueChange=(b => self.send(ElseToggle(b)))
-      />
-      <Button
-        title="Learefaefaeoeeere"
-        color="#841584"
-        onPress=(
-          _e =>
-            self.send(
-              UpserTask({
-                key: string_of_int(List.length(self.state.tasks)),
-                order: List.length(self.state.tasks),
-                text: "hieegh key: " ++ string_of_int(List.length(self.state.tasks)),
-                finish: false
-              })
+      /* <TodoCell
+           text=name
+           finish=self.state.toggle
+           onValueChange=(b => self.send(ElseToggle(b)))
+         /> */
+
+        <Button
+          title=name
+          color="#841584"
+          onPress=(
+            _e =>
+              self.send(
+                UpserTask({
+                  key: string_of_int(Random.int(100000)),
+                  order: List.length(self.state.tasks),
+                  text:
+                    "My task",
+                  finish: false
+                })
+              )
+          )
+        />
+        <Button
+          title="add task"
+          color="#841584"
+          onPress=(
+            _e =>
+              self.send(
+                UpserTask({
+                  key: string_of_int(Random.int(100000)),
+                  order: List.length(self.state.tasks),
+                  text:
+                    "My task",
+                  finish: false
+                })
+              )
+          )
+        />
+        <FlatList
+          renderItem=(
+            renderItem(
+              item => self.send(UpserTask(item)),
+              item => self.send(DeleteTask(item)),
+              item => self.send(UpserTask(item))
             )
-        )
-      />
-      <FlatList
-        renderItem=(renderItem(item => self.send(Toggle(item))))
-        keyExtractor=((item, _) => item.key)
-        data=(Array.of_list(
-          List.sort((x,y) => x.order - y.order,self.state.tasks)
-          ))
-      />
-    </View>
+          )
+          keyExtractor=((item, _) => item.key)
+          data=(
+            Array.of_list(
+              List.sort((x, y) => x.order - y.order, self.state.tasks)
+            )
+          )
+        />
+      </View>
 };

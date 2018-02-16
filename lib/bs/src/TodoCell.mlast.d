@@ -1,1 +1,1 @@
-src/TodoCell.cmj :
+src/TodoCell.cmj : src/EditButton.cmj

@@ -1,14 +1,33 @@
 open BsReactNative;
 
-let component = ReasonReact.statelessComponent("TodoCell");
+type state = bool;
+
+type action =
+  | ToggleEdit(bool);
+
+let component = ReasonReact.reducerComponent("TodoCell");
 
 let make =
-    (~text: string, ~finish: bool, ~onValueChange: bool => unit, _children) => {
+    (~value: string, ~toggle: bool, ~onToggle, ~onDelete, ~onEdit, _children) => {
   ...component,
-  render: _self =>
+  initialState: () => false,
+  reducer: (action, _state) =>
+    switch action {
+    | ToggleEdit(b) => ReasonReact.Update(b)
+    },
+  render: self =>
     <View>
-      <Text> (ReasonReact.stringToElement(text)) </Text>
-      <Switch value=finish onValueChange />
+        <EditButton value onEdit isEditing=self.state onSwitch=(b => self.send(ToggleEdit(b))) />
+        <Text>(ReasonReact.stringToElement(string_of_bool(toggle))) </Text>
+      <Switch value=toggle onValueChange=onToggle />
+      <Button title="delete" color="#841584" onPress=(_e => onDelete()) />
     </View>
 };
-/* ReasonReact.Update({...state, tasks: [i, List.filter(item => item.key != i.key ,state.tasks]}) */
+
+/* style=Style.(
+  style([
+    alignItems(Center),
+    backgroundColor(!self.state ? "#AAA" : "#DDD"),
+    padding(Pt(10.))
+  ]) 
+  )*/
