@@ -3,6 +3,7 @@ open BsReactNative;
 type item = {
   key: string,
   text: string,
+  order: int,
   finish: bool
 };
 
@@ -57,6 +58,7 @@ let make = (~name: string, _children) => {
             self.send(
               UpserTask({
                 key: string_of_int(List.length(self.state.tasks)),
+                order: List.length(self.state.tasks),
                 text: "hieegh key: " ++ string_of_int(List.length(self.state.tasks)),
                 finish: false
               })
@@ -66,7 +68,9 @@ let make = (~name: string, _children) => {
       <FlatList
         renderItem=(renderItem(item => self.send(Toggle(item))))
         keyExtractor=((item, _) => item.key)
-        data=(Array.of_list(self.state.tasks))
+        data=(Array.of_list(
+          List.sort((x,y) => x.order - y.order,self.state.tasks)
+          ))
       />
     </View>
 };
