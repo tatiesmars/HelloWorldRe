@@ -17,22 +17,43 @@ type action =
   | DeleteTask(item)
   | ElseToggle(bool);
 
+/* let fullWidth = Dimensions.(get('window').width); */
+let windowWidth = Dimensions.(get(`window))##width;
+
 let onButtonPress = v => Alert.alert(~title={j|你好，$v|j}, ());
 
 let component = ReasonReact.reducerComponent("Home");
 
 let renderItem = (onPress, onDelete, onEdit) =>
   FlatList.renderItem(({item}) =>
-    <TodoCell
-      value=(item.text)
-      toggle=item.finish
-      onToggle=(b => onPress({...item, finish: b}))
-      onDelete=(() => onDelete(item))
-      onEdit=((s) => onEdit({...item, text: s}))
-    />
+    <View
+      style=Style.(
+              style([
+                flex(1.),
+                borderBottomWidth(0.5),
+                borderColor("#222"),
+                width(Pt(float_of_int(windowWidth)))
+              ])
+            )>
+      <TodoCell
+        value=item.text
+        toggle=item.finish
+        onToggle=(b => onPress({...item, finish: b}))
+        onDelete=(() => onDelete(item))
+        onEdit=(s => onEdit({...item, text: s}))
+      />
+    </View>
   );
 
-let make = (~name: string, _children) => {
+/* <View style=Style.(style([flex(0.1), backgroundColor("#444")]))>
+       <View> <Text> (ReasonReact.stringToElement("Header")) </Text> </View>
+     </View>
+     <View style=Style.(style([flex(0.8)]))> <Home name="Home" /> </View>
+     <View style=Style.(style([flex(0.1), backgroundColor("#444")]))>
+       <View> <Text> (ReasonReact.stringToElement("Footer")) </Text> </View>
+     </View>
+   </View> */
+let make = (~title: string, _children) => {
   ...component,
   initialState: () => {tasks: [], toggle: false},
   reducer: (action, state) =>
@@ -52,46 +73,47 @@ let make = (~name: string, _children) => {
   render: self =>
     <View
       style=Style.(
-              style([flex(1.), justifyContent(Center), alignItems(Center)])
+              style([
+                flex(1.),
+                justifyContent(Center),
+                alignItems(Center),
+                backgroundColor("#444"),
+                width(Pt(float_of_int(windowWidth)))
+              ])
             )>
-      /* <TodoCell
-           text=name
-           finish=self.state.toggle
-           onValueChange=(b => self.send(ElseToggle(b)))
-         /> */
-
-        <Button
-          title=name
-          color="#841584"
-          onPress=(
-            _e =>
-              self.send(
-                UpserTask({
-                  key: string_of_int(Random.int(100000)),
-                  order: List.length(self.state.tasks),
-                  text:
-                    "My task",
-                  finish: false
-                })
-              )
-          )
-        />
-        <Button
-          title="add task"
-          color="#841584"
-          onPress=(
-            _e =>
-              self.send(
-                UpserTask({
-                  key: string_of_int(Random.int(100000)),
-                  order: List.length(self.state.tasks),
-                  text:
-                    "My task",
-                  finish: false
-                })
-              )
-          )
-        />
+      <StatusBar barStyle=`darkContent hidden=true />
+      <View
+        style=Style.(style([flex(0.13),flexDirection(ColumnReverse), width(Pt(float_of_int(windowWidth)))]))>
+        <View style=Style.(style([flexDirection(Row), justifyContent(SpaceBetween)]))>
+          <Text> (ReasonReact.stringToElement(title)) </Text>
+          <Button
+            title="Add +"
+            color="#841584"
+            onPress=(
+              _e =>
+                self.send(
+                  UpserTask({
+                    key: string_of_int(Random.int(100000)),
+                    order: List.length(self.state.tasks),
+                    text: "My task",
+                    finish: false
+                  })
+                )
+            )
+          />
+        </View>
+      </View>
+      <View
+        style=Style.(
+                style([
+                  flex(0.78),
+                  flexDirection(Column),
+                  justifyContent(Center),
+                  alignItems(Center),
+                  backgroundColor("#EEE"),
+                  width(Pt(float_of_int(windowWidth)))
+                ])
+              )>
         <FlatList
           renderItem=(
             renderItem(
@@ -108,4 +130,11 @@ let make = (~name: string, _children) => {
           )
         />
       </View>
+      <View
+        style=Style.(style([flex(0.09), width(Pt(float_of_int(windowWidth)))]))>
+        <View>
+          <Text> (ReasonReact.stringToElement("Footerrrr")) </Text>
+        </View>
+      </View>
+    </View>
 };

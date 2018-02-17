@@ -25,5 +25,3 @@ let make = (~value, ~isEditing, ~onEdit, ~onSwitch, _children) => {
               <Text> (ReasonReact.stringToElement(value)) </Text>
       </TouchableOpacity>              
 };
-
-/* style={styles.input} textAlign={'center'} placeholder="Your Account" */

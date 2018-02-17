@@ -17,17 +17,19 @@ let make =
     },
   render: self =>
     <View>
-        <EditButton value onEdit isEditing=self.state onSwitch=(b => self.send(ToggleEdit(b))) />
-        <Text>(ReasonReact.stringToElement(string_of_bool(toggle))) </Text>
-      <Switch value=toggle onValueChange=onToggle />
+      <EditButton
+        value
+        onEdit
+        isEditing=self.state
+        onSwitch=(b => self.send(ToggleEdit(b)))
+      />
+      <Text> (ReasonReact.stringToElement(string_of_bool(toggle))) </Text>
       <Button title="delete" color="#841584" onPress=(_e => onDelete()) />
+      <Switch value=toggle onValueChange=onToggle />
     </View>
 };
-
-/* style=Style.(
-  style([
-    alignItems(Center),
-    backgroundColor(!self.state ? "#AAA" : "#DDD"),
-    padding(Pt(10.))
-  ]) 
-  )*/
+/*
+ flex: 1,
+ flexDirection: 'column',
+ justifyContent: 'center',
+ alignItems: 'center' */
