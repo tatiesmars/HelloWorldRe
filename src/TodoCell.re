@@ -24,7 +24,7 @@ let make =
         onSwitch=(b => self.send(ToggleEdit(b)))
       />
       <Text> (ReasonReact.stringToElement(string_of_bool(toggle))) </Text>
-      <Button title="delete" color="#841584" onPress=(_e => onDelete()) />
+      <Button title="delete" color="#f08080" onPress=(_e => onDelete()) />
       <Switch value=toggle onValueChange=onToggle />
     </View>
 };

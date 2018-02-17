@@ -81,14 +81,14 @@ let make = (~title: string, _children) => {
                 width(Pt(float_of_int(windowWidth)))
               ])
             )>
-      <StatusBar barStyle=`darkContent hidden=true />
+      <StatusBar barStyle=`lightContent hidden=false />
       <View
         style=Style.(style([flex(0.13),flexDirection(ColumnReverse), width(Pt(float_of_int(windowWidth)))]))>
         <View style=Style.(style([flexDirection(Row), justifyContent(SpaceBetween)]))>
           <Text> (ReasonReact.stringToElement(title)) </Text>
           <Button
             title="Add +"
-            color="#841584"
+            color="#f08080"
             onPress=(
               _e =>
                 self.send(
