@@ -2,10 +2,10 @@ open BsReactNative;
 
 Random.self_init();
 
+
 let header = () => <View />;
 
 let footer = () => <View />;
-
 let app = () => 
   <Home title="My Todo List!!" />;
 /* <View style=Style.(style([flex(1.)]))>

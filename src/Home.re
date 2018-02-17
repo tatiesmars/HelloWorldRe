@@ -1,5 +1,8 @@
 open BsReactNative;
 
+let adUntId = "ca-app-pub-1425926517331745~6816357585";
+let bannerId = "ca-app-pub-6500075216701705/2667297034";
+
 type item = {
   key: string,
   text: string,
@@ -17,7 +20,9 @@ type action =
   | DeleteTask(item)
   | ElseToggle(bool);
 
-/* let fullWidth = Dimensions.(get('window').width); */
+
+let () = BsExpo.Constants.constants##manifest |> Js.log |> ignore; 
+let () = BsExpo.AdMob.make |> Js.log |> ignore; 
 let windowWidth = Dimensions.(get(`window))##width;
 
 let onButtonPress = v => Alert.alert(~title={j|你好，$v|j}, ());
@@ -133,7 +138,7 @@ let make = (~title: string, _children) => {
       <View
         style=Style.(style([flex(0.09), width(Pt(float_of_int(windowWidth)))]))>
         <View>
-          <Text> (ReasonReact.stringToElement("Footerrrr")) </Text>
+          <Text> (ReasonReact.stringToElement("eqd")) </Text>
         </View>
       </View>
     </View>

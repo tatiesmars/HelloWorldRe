@@ -9,6 +9,8 @@ S /Users/mac/Workspace/Tatiesmars/HelloWorldRe/node_modules/bs-react-native/lib/
 B /Users/mac/Workspace/Tatiesmars/HelloWorldRe/node_modules/bs-react-native/lib/ocaml
 S /Users/mac/Workspace/Tatiesmars/HelloWorldRe/node_modules/reason-react/lib/ocaml
 B /Users/mac/Workspace/Tatiesmars/HelloWorldRe/node_modules/reason-react/lib/ocaml
+S /Users/mac/Workspace/Tatiesmars/HelloWorldRe/node_modules/bs-expo/lib/ocaml
+B /Users/mac/Workspace/Tatiesmars/HelloWorldRe/node_modules/bs-expo/lib/ocaml
 S src
 B lib/bs/src
 ####BSB GENERATED: NO EDIT}
